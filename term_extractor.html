@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Term Extractor</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.17.4/xlsx.full.min.js"></script>
+</head>
+<body>
+
+    <label for="fileInput">Select Word document:</label>
+    <input type="file" id="fileInput" accept=".docx" />
+    <button onclick="browseFile()">Browse</button>
+
+    <p id="filePathDisplay"></p>
+
+    <br><br>
+
+    <button onclick="extractTerms()">Extract Terms</button>
+    <button onclick="exportToExcel()">Export to Excel</button>
+
+    <br><br>
+
+    <label for="resultText">Key Terms:</label>
+    <textarea id="resultText" rows="10" cols="50" readonly></textarea>
+
+    <script>
+        let fileInput = document.getElementById('fileInput');
+        let resultText = document.getElementById('resultText');
+        let keyTermsForExport;
+
+        function browseFile() {
+            fileInput.click();
+        }
+
+        fileInput.addEventListener('change', function () {
+            fileInput.disabled = true;
+            let filePath = fileInput.value;
+            let filePathDisplay = document.getElementById('filePathDisplay');
+            filePathDisplay.textContent = `Selected file: ${filePath}`;
+        });
+
+        function extractTerms() {
+            let formData = new FormData();
+            formData.append('file', fileInput.files[0]);
+
+            let xhr = new XMLHttpRequest();
+            xhr.open('POST', 'http://localhost:5000/extract-terms', true);
+            xhr.onload = function () {
+                if (xhr.status === 200) {
+                    let data = JSON.parse(xhr.responseText);
+                    keyTermsForExport = data.key_terms;
+                    resultText.value = keyTermsForExport.join('\n');
+                } else {
+                    resultText.value = "Error reading the Word document.";
+                    console.error(xhr.statusText);
+                }
+            };
+            xhr.onerror = function () {
+                resultText.value = "Error reading the Word document.";
+                console.error(xhr.statusText);
+            };
+            xhr.send(formData);
+        }
+
+        function exportToExcel() {
+            if (keyTermsForExport && keyTermsForExport.length > 0) {
+                try {
+                    let exportData = keyTermsForExport.map(term => ({ 'Key Terms': term }));
+
+                    // Check if exportData is a non-empty array
+                    if (Array.isArray(exportData) && exportData.length > 0) {
+                        // Validate if exportData has the expected format
+                        if (typeof exportData[0] === 'object' && 'Key Terms' in exportData[0]) {
+                            let worksheet = XLSX.utils.json_to_sheet(exportData, { header: ['Key Terms'] });
+                            let workbook = XLSX.utils.book_new();
+                            XLSX.utils.book_append_sheet(workbook, worksheet, 'Sheet 1');
+
+                            // Check if XLSX.write is available
+                            if (typeof XLSX.writeFile === 'function') {
+                                try {
+                                    XLSX.writeFile(workbook, 'key_terms.xlsx');
+                                    alert("Key terms exported to Excel file.");
+                                } catch (writeError) {
+                                    console.error("Error writing to file:", writeError);
+                                    alert("Error exporting to Excel. Please check the console for details.");
+                                }
+                            } else {
+                                alert("Error exporting to Excel: XLSX.writeFile is not available.");
+                            }
+                        } else {
+                            alert("Error exporting to Excel: Invalid data format.");
+                        }
+                    } else {
+                        alert("No data to export.");
+                    }
+                } catch (error) {
+                    console.error("Error exporting to Excel:", error);
+                    alert("Error exporting to Excel. Please check the console for details.");
+                }
+            } else {
+                alert("Please extract key terms first.");
+            }
+        }
+    </script>
+
+</body>
+</html>
