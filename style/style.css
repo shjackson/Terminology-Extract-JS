@@ -1,0 +1,146 @@
+body {
+    background-color: #f2f6fc;
+    font-family: sans-serif;
+    font-size: 15px;
+}
+
+h1 {
+    margin-top: 8px;
+    margin-bottom: 0px;
+    background-color: #4287f5;
+    color: white;
+    padding-left: 5px;
+    padding-bottom: 3px;
+}
+
+.results_header {
+    margin: 0px;
+    margin-bottom: 5px;
+    text-align: center;
+    background-color: e6f2ff;
+    padding-top: 5px;
+    padding-bottom: 7px;
+}
+
+table {
+      width: 100%;
+      font-size: 15px;
+      margin-top: 0px;
+      }
+
+a {
+    display: ;
+}
+
+
+.results {
+    width: 700px;
+    overflow: auto;
+    border: 3px dotted #a7b9d6;
+    text-align: left;
+    align-items: center;
+    justify-content: center;
+    font-family: sans-serif;
+    font-size: 14px;
+    color: black;
+    text-decoration: none;
+    background-color: #fafbfc;
+    margin: auto;
+    margin-bottom: 10px;
+    margin-top: 0px;
+    padding: 10px;
+    }
+
+
+.fixed-header, .fixed-footer {
+        margin-left: -10px;
+        margin-top: -10px;
+        width: 100%;
+        position: fixed;
+        background-color: #cae9ed;
+        padding-left: 35px;
+        padding-right: 35px;
+        height: 150px;
+        z-index: 1;
+    }
+
+div.stuff {
+   /* overflow-x:auto; */
+   overflow-x: auto;
+   overflow-y: auto;
+   top: 150px;
+   left: 0;
+   right: 0;
+   position: absolute;
+   z-index: 0;
+}
+
+div.spacer {
+    height: 10px;
+    position: relative;
+    top: -150px;
+}
+
+
+
+
+.header_link {
+background-color: white;
+margin-bottom: 10px;
+}
+
+td.stats {
+  text-align: center;
+  vertical-align: middle;
+}
+
+td.item {
+  text-align: right;
+  vertical-align: middle;
+  /* width: 250px; */
+}
+
+th.item {
+  text-align: right;
+  vertical-align: middle;
+  /* width: 250px; */
+  }
+
+
+
+.dropbtn {
+    background-color: #ffce85;
+    color: black;
+    padding: 10px;
+    font-size: 12px;
+}
+.dropdown {
+    display: inline-block;
+    position: relative;
+}
+.dropdown-content {
+   overflow-x: hidden;
+   max-height: calc(100vh -  200px);
+   overflow-y: scroll !important;
+    position: relative;
+    background-color: lightgrey;
+    min-width: 200px;
+    display: none;
+    z-index: 1;
+}
+.dropdown-content a {
+    color: black;
+    padding: 5px 5px;
+    text-decoration: none;
+    font-size: 15px;
+    display: block;
+}
+.dropdown-content a:hover {
+    background-color: #ffce85;
+}
+.dropdown:hover .dropdown-content {
+    display: block;
+}
+.dropdown:hover .dropbtn {
+    background-color: grey;
+}
